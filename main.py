@@ -37,7 +37,8 @@ try:
         
         opcao = {
             'outtmpl': str(download_dir / '%(title)s.%(ext)s'),
-            'format': 'best[ext=mp4]',
+            'format': 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
+            'merge_output_format': 'mp4',
             'quiet': True,
             'no_warnings': True,
             'noprogress': True,
@@ -45,15 +46,18 @@ try:
             'progress_hooks': [progress]
         }
         
-        with YoutubeDL(opcao) as ydl:
-            info = ydl.extract_info(url, download=False)
-            if info.get('_type') != 'playlist':
-                file_path = Path(ydl.prepare_filename(info))
-                if file_path.exists():
-                    print(f'File already exists: {file_path.name}')
-                    continue
+        try:
+            with YoutubeDL(opcao) as ydl:
+                info = ydl.extract_info(url, download=False)
+                if info.get('_type') != 'playlist':
+                    file_path = Path(ydl.prepare_filename(info))
+                    if file_path.exists():
+                        print(f'File already exists: {file_path.name}')
+                        continue
 
-            ydl.download([url])
+                ydl.download([url])
+        except Exception as e:
+            print(f'Error: {e}')
 
 except Exception as e:
     print(f"Error: {e}")
