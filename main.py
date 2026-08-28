@@ -35,7 +35,7 @@ try:
         download_dir = Path.home() / 'Downloads'
         download_dir.mkdir(parents=True, exist_ok=True)
         
-        opcao = {
+        options = {
             'outtmpl': str(download_dir / '%(title)s.%(ext)s'),
             'format': 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
             'merge_output_format': 'mp4',
@@ -47,7 +47,7 @@ try:
         }
         
         try:
-            with YoutubeDL(opcao) as ydl:
+            with YoutubeDL(options) as ydl:
                 info = ydl.extract_info(url, download=False)
                 if info.get('_type') != 'playlist':
                     file_path = Path(ydl.prepare_filename(info))
